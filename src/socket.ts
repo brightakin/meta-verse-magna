@@ -53,16 +53,20 @@ const createSocketServer = (serverPort: number) => {
         const blockNumber = await getLatestBlockNumber();
         const transactions = await getBlockTransactions(blockNumber);
 
-        io.to("all").emit("newEvent", filterTransactions(transactions, "all"));
+        io.to("all").emit("newEvent", filterTransactions(transactions, `all`));
         io.to(`sender:${address}`).emit(
           "newEvent",
-          filterTransactions(transactions, `sender:${address}`, address)
+          filterTransactions(transactions, `sender`, address)
         );
         io.to(`receiver:${address}`).emit(
           "newEvent",
-          filterTransactions(transactions, `receiver:${address}`, address)
+          filterTransactions(transactions, `receiver`, address)
         );
-      }, 100);
+        io.to(`address:${address}`).emit(
+          "newEvent",
+          filterTransactions(transactions, `both`, address)
+        );
+      }, 12000);
 
       socket.on("unSubscribe", (type, address) => {
         if (type === "all") {
