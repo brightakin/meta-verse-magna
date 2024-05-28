@@ -52,7 +52,6 @@ const createSocketServer = (serverPort: number) => {
 
       // Logic for different subscription types
       setInterval(async () => {
-        console.log("here");
         const blockNumber = await getLatestBlockNumber();
         const transactions = await getBlockTransactions(blockNumber);
 

@@ -6,7 +6,7 @@ const serverUrl = "http://localhost:4001";
 const client = ioClient(serverUrl, {
   auth: {
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJicmlnaHRha2luIiwiaWF0IjoxNzE2ODAyNzI5LCJleHAiOjE3MTY4MDYzMjl9.RjvV8LpCmki5ORaKsJKNcS_0-o8zoAuka46EtPTKmZQ",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJicmlnaHRha2luIiwiaWF0IjoxNzE2ODg4MDA1LCJleHAiOjE3MTY4OTE2MDV9.vOIyE0pKns6GBbyBRgetvfP5f53Y1lmS8Nz1smbi4Zg",
   },
   transports: ["websocket"],
 });

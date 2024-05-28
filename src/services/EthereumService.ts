@@ -7,7 +7,7 @@ const rpcUrls: string[] = [
   // Add more RPC URLs if needed
 ];
 
-export const getLatestBlockNumber = async (): Promise<number> => {
+export async function getLatestBlockNumber(): Promise<number> {
   for (const url of rpcUrls) {
     try {
       const response = await axios.post(url, {
@@ -22,11 +22,11 @@ export const getLatestBlockNumber = async (): Promise<number> => {
     }
   }
   throw new Error("All RPC URLs failed");
-};
+}
 
-export const getBlockTransactions = async (
+export async function getBlockTransactions(
   blockNumber: number
-): Promise<any[]> => {
+): Promise<any[]> {
   for (const url of rpcUrls) {
     try {
       const response = await axios.post(url, {
@@ -35,10 +35,18 @@ export const getBlockTransactions = async (
         params: [`0x${blockNumber.toString(16)}`, true],
         id: 1,
       });
-      return response.data.result.transactions;
+      return response.data.result.transactions.map((tx: any) => ({
+        senderAddress: tx.from,
+        receiverAddress: tx.to,
+        blockNumber,
+        blockHash: tx.blockHash,
+        transactionHash: tx.hash,
+        gasPrice: parseInt(tx.gasPrice, 16),
+        value: parseInt(tx.value, 16),
+      }));
     } catch (error) {
       console.error(`RPC URL failed: ${url}`, error);
     }
   }
   throw new Error("All RPC URLs failed");
-};
+}
