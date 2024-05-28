@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { registerUser, loginUser } from "../services/UserService";
+import Logger from "../utils/Logger";
 
 export const register = async (
   req: Request,
@@ -11,6 +12,7 @@ export const register = async (
     const user = await registerUser(username, password);
     res.json(user);
   } catch (error: any) {
+    Logger.error(error);
     next(error);
   }
 };
@@ -25,6 +27,7 @@ export const login = async (
     const token = await loginUser(username, password);
     res.json({ token });
   } catch (error: any) {
+    Logger.error(error);
     next(error);
   }
 };

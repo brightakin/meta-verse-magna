@@ -5,6 +5,7 @@ import {
   getBlockTransactions,
   getLatestBlockNumber,
 } from "./services/EthereumService";
+import Logger from "./utils/Logger";
 
 const createSocketServer = (serverPort: number) => {
   const io = new Server(serverPort, {
@@ -22,6 +23,7 @@ const createSocketServer = (serverPort: number) => {
         process.env.JWT_SECRET || "some-secret",
         (err: any, decoded: any) => {
           if (err) {
+            Logger.error("Authntication Error", err);
             return next(new Error("Authentication error"));
           }
           socket.data.user = decoded;
@@ -29,6 +31,7 @@ const createSocketServer = (serverPort: number) => {
         }
       );
     } else {
+      Logger.error("Authntication Error");
       next(new Error("Authentication error"));
     }
   });
