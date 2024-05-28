@@ -1,33 +1,41 @@
-version: "3.8"
+version: "3.4"
 
 services:
-  app:
-    build: .
-    ports:
-      - "4000:4000"
-      - "4001:4001"
-    environment:
-      - PORT=4000
-      - JWT_SECRET=your_jwt_secret
-      - DATABASE_URL=mysql://user:password@db:3306/metaverse_magna
-    depends_on:
-      - db
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-
-  db:
+  mysqldb:
     image: mysql:5.7
-    restart: always
+    restart: unless-stopped
+    env_file: ./.env
     environment:
-      MYSQL_ROOT_PASSWORD: toluwase
-      MYSQL_DATABASE: metaverse_magna
-      MYSQL_USER: root
-      MYSQL_PASSWORD: toluwase
+      - MYSQL_ROOT_PASSWORD=toluwase
+      - MYSQL_ALLOW_EMPTY_PASSWORD
+      - MYSQL_DATABASE=metaverse_db
     ports:
-      - "3306:3306"
+      - $MYSQLDB_LOCAL_PORT:3306
     volumes:
-      - db_data:/var/lib/mysql
+      - db:/var/lib/mysql
+    networks:
+      - auth-networks
+
+  server:
+    build: ./server
+    depends_on:
+      - mysqldb
+    env_file: ./.env
+    restart: unless-stopped
+    environment:
+      - DB_HOST=127.0.0.1
+      - DB_USER=root
+      - DB_PASSWORD=toluwase
+      - DB_NAME=metaverse_db
+    ports:
+      - $NODE_LOCAL_PORT:4000
+    networks:
+      - auth-networks
+    command: npm start
+
+networks:
+  auth-networks:
+    driver: bridge
 
 volumes:
-  db_data:
+  db:

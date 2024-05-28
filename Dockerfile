@@ -18,4 +18,4 @@ EXPOSE 4000
 EXPOSE 4001
 
 # Start the application
-CMD [ "node", "dist/index.js" ]
+CMD ["npm", "start"]
