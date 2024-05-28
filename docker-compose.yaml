@@ -1,41 +1,36 @@
-version: "3.4"
+version: "3.8"
 
 services:
-  mysqldb:
-    image: mysql:5.7
-    restart: unless-stopped
-    env_file: ./.env
-    environment:
-      - MYSQL_ROOT_PASSWORD=toluwase
-      - MYSQL_ALLOW_EMPTY_PASSWORD
-      - MYSQL_DATABASE=metaverse_db
+  app:
+    build: .
     ports:
-      - $MYSQLDB_LOCAL_PORT:3306
-    volumes:
-      - db:/var/lib/mysql
-    networks:
-      - auth-networks
-
-  server:
-    build: ./server
+      - "4000:4000"
+      - "4001:4001"
     depends_on:
-      - mysqldb
-    env_file: ./.env
-    restart: unless-stopped
+      - db
     environment:
-      - DB_HOST=127.0.0.1
-      - DB_USER=root
-      - DB_PASSWORD=toluwase
-      - DB_NAME=metaverse_db
-    ports:
-      - $NODE_LOCAL_PORT:4000
-    networks:
-      - auth-networks
-    command: npm start
+      - DATABASE_URL=mysql://user:password@db:3306/metaverse_db
+      - JWT_SECRET=your_jwt_secret
+    volumes:
+      - .:/usr/src/app
 
-networks:
-  auth-networks:
-    driver: bridge
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: metaverse_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: toluwase
+      MYSQL_ROOT_PASSWORD: toluwase
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  db:
+  db_data:
