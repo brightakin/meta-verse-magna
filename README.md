@@ -6,6 +6,7 @@
 2. Create a `.env` file with the necessary environment variables
 3. Run `docker-compose up --build`
 4. The app will be available at `http://localhost:4000`
+5. To run without docker run npm install then npm start
 
 ## Endpoints
 
