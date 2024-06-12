@@ -20,3 +20,9 @@ Connect to the Socket.io server at `http://localhost:4001`
 - Authenticate with the JWT token
 - Subscribe to events with types: `all`, `sender`, `receiver`, `both`
 - Run command node test.js in the root directory to test the application
+
+## Test
+
+- Setup and run the application with the above instructions
+- Open another terminal window
+- Run the code node test.js in the route directory
