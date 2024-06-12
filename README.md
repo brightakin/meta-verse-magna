@@ -25,4 +25,4 @@ Connect to the Socket.io server at `http://localhost:4001`
 
 - Setup and run the application with the above instructions
 - Open another terminal window
-- Run the code node test.js in the route directory
+- Run the command node test.js in the route directory
